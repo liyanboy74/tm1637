@@ -17,18 +17,7 @@ and to permit persons to whom the Software is furnished to do so, subject to the
 #ifndef _TM1637_H_
 #define _TM1637_H_
 
-void TM1637_Init(void);
-void TM1637_Demo(void);
-void TM1637_DisplayDec(int v, int displaySeparator);
 void TM1637_SetBrightness(char brightness);
-void TM1637_Start(void);
-void TM1637_Stop(void);
-void TM1637_ReadResult(void);
-void TM1637_WriteByte(unsigned char b);
-void TM1637_DelayUsec(unsigned int i);
-void TM1637_ClkHigh(void);
-void TM1637_ClkLow(void);
-void TM1637_DataHigh(void);
-void TM1637_DATALow(void);
+void TM1637_DisplayDec(int v, int displaySeparator);
 
 #endif /* TM1637_H_ */

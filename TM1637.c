@@ -45,23 +45,60 @@ void TM1637_DataLow(void)
     HAL_GPIO_WritePin(DATA_GPIO_Port, DATA_Pin, GPIO_PIN_RESET);
 }
 
-void TM1637_Demo(void)
+void TM1637_DelayUsec(unsigned int i)
 {
-	uint8_t i = 0;
+    for (; i>0; i--) {
+        for (int j = 0; j < 500; ++j) {
+					__NOP();
+        }
+    }
+}
 
-	TM1637_Init();
-	TM1637_SetBrightness(8);
+void TM1637_Start(void)
+{
+    TM1637_ClkHigh();
+    TM1637_DataHigh();
+    TM1637_DelayUsec(2);
+    TM1637_DataLow();
+}
 
-	while(1){
-		TM1637_DisplayDec(i++, 0);
+void TM1637_Stop(void)
+{
+    TM1637_ClkLow();
+    TM1637_DelayUsec(2);
+    TM1637_DataLow();
+    TM1637_DelayUsec(2);
+    TM1637_ClkHigh();
+    TM1637_DelayUsec(2);
+    TM1637_DataHigh();
+}
+
+void TM1637_WriteByte(unsigned char b)
+{
+	for (int i = 0; i < 8; ++i) {
+		TM1637_ClkLow();
+		if (b & 0x01) {
+			TM1637_DataHigh();
+		}
+		else {
+			TM1637_DataLow();
+		}
+		TM1637_DelayUsec(3);
+		b >>= 1;
+		TM1637_ClkHigh();
+		TM1637_DelayUsec(3);
 	}
 }
 
 
-void TM1637_Init(void)
+void TM1637_ReadResult(void)
 {
-	MX_GPIO_Init();
-    TM1637_SetBrightness(8);
+    TM1637_ClkLow();
+    TM1637_DelayUsec(5);
+
+    TM1637_ClkHigh();
+    TM1637_DelayUsec(2);
+    TM1637_ClkLow();
 }
 
 
@@ -107,61 +144,3 @@ void TM1637_SetBrightness(char brightness)
     TM1637_ReadResult();
     TM1637_Stop();
 }
-
-void TM1637_Start(void)
-{
-    TM1637_ClkHigh();
-    TM1637_DataHigh();
-    TM1637_DelayUsec(2);
-    TM1637_DataLow();
-}
-
-void TM1637_Stop(void)
-{
-    TM1637_ClkLow();
-    TM1637_DelayUsec(2);
-    TM1637_DataLow();
-    TM1637_DelayUsec(2);
-    TM1637_ClkHigh();
-    TM1637_DelayUsec(2);
-    TM1637_DataHigh();
-}
-
-void TM1637_ReadResult(void)
-{
-    TM1637_ClkLow();
-    TM1637_DelayUsec(5);
-
-    TM1637_ClkHigh();
-    TM1637_DelayUsec(2);
-    TM1637_ClkLow();
-}
-
-void TM1637_WriteByte(unsigned char b)
-{
-	for (int i = 0; i < 8; ++i) {
-		TM1637_ClkLow();
-		if (b & 0x01) {
-			TM1637_DataHigh();
-		}
-		else {
-			TM1637_DataLow();
-		}
-		TM1637_DelayUsec(3);
-		b >>= 1;
-		TM1637_ClkHigh();
-		TM1637_DelayUsec(3);
-	}
-}
-
-void TM1637_DelayUsec(unsigned int i)
-{
-    for (; i>0; i--) {
-        for (int j = 0; j < 500; ++j) {
-					__NOP();
-        }
-    }
-}
-
-
-
