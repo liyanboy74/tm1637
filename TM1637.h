@@ -20,4 +20,4 @@ and to permit persons to whom the Software is furnished to do so, subject to the
 void TM1637_SetBrightness(char brightness);
 void TM1637_DisplayDec(int v, int displaySeparator);
 
-#endif /* TM1637_H_ */
+#endif /* _TM1637_H_ */
